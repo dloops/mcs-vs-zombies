@@ -7,7 +7,7 @@ public class Main {
         final int gameSize = Game.gameSize;
         final int padding = Game.PADDING;
 
-        Game game = new Game(8, 5, 200);
+        Game game = new Game(5, 8, 200);
 
 
     }

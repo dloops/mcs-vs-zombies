@@ -1,20 +1,37 @@
 package org.academiadecodigo.bootcamp65.Game;
 
-import org.academiadecodigo.bootcamp65.gfx.simplegfx.GridImage;
+import org.academiadecodigo.bootcamp65.Objects.Plants.*;
+import org.academiadecodigo.bootcamp65.Objects.Zombies.Zombie;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.SimpleGfxGrid;
 
 public class Game {
     public final static int gameSize = 200;
     public final static int PADDING = 10;
-    private SimpleGfxGrid grid;
+    private int cols;
+    private int rows;
     private int threadSleep;
-    private Intro intro;
+    private int sleepCount;
+    private int buyableLand;
+
+    private SimpleGfxGrid grid;
+    private Menu intro;
     private GameOver gameOver;
+    private Zombie[] zombies;
+    private Plant[] plants;
+
+    private float zombieSpawnChance = 0.015f;
+
 
     public Game(int cols, int rows, int threadSleep) throws InterruptedException {
+        this.cols = cols;
+        this.rows = rows;
+        buyableLand = (int) Math.ceil((double) rows / 3);
+        plants = new Plant[buyableLand*rows];
+
+        zombies = new Zombie[(cols*rows) - (rows *2)];
         this.threadSleep = threadSleep;
 
-        intro = new Intro();
+        intro = new Menu();
         gameOver = new GameOver();
         intro.intro();
 
@@ -39,24 +56,76 @@ public class Game {
 
     public void start() throws InterruptedException {
 
-        GridImage zombie1 = new GridImage(8, 1, "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png");
-        GridImage zombie2 = new GridImage(8, 2, "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png");
-        GridImage zombie3 = new GridImage(8, 3, "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png");
-        GridImage zombie4 = new GridImage(8, 4, "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png");
-        GridImage zombie5 = new GridImage(8, 5, "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png");
+        Plant plant = new Plant(1, 1);
+        Plant plant1 = new Plant(2, 1);
+        Plant plant2 = new Plant(3, 1);
+        Plant plant3 = new Plant(4, 1);
+        Plant plant4 = new Plant(5, 1);
 
-        for (int i = 8; i > 0; i--) {
-            Thread.sleep(500); // 1 second delay on the baljeet moves
-            zombie1.move(i, 1);
-            zombie2.move(i, 2);
-            zombie3.move(i, 3);
-            zombie4.move(i, 4);
-            zombie5.move(i, 5);
 
-        }
+        while(true) {
 
-        Thread.sleep(1000);
+    Thread.sleep(200);
 
-        gameOver.over();
+    difficultyIncrease();
+    spawnZombies();
+    moveZombies();
+}
+
     }
+
+    private void difficultyIncrease() {
+        sleepCount += 200;
+        if(sleepCount >= 10000) {
+            sleepCount = 0;
+            zombieSpawnChance += 0.001f;
+            System.out.println("zombie spawn chance - " + zombieSpawnChance);
+        }
+    }
+
+    private void spawnZombies() {
+        for (int i = 1; i <= cols; i++) {
+            boolean occupied = false;
+
+            for (int j = 0; j < zombies.length; j++) {
+                if(zombies[j] != null) {
+                if(zombies[j].gridCol() == i && zombies[j].gridRow() == rows) {
+                    occupied = true;
+                    continue;
+                }
+                }
+            }
+
+            if(!occupied) {
+                if (zombieSpawnChance > Math.random()) {
+                    for (int k = 0; k < zombies.length; k++) {
+                        if(zombies[k] == null || zombies[k].isDead()) {
+                            zombies[k] = new Zombie(i, rows);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void moveZombies() {
+        for (int i = 0; i < zombies.length; i++) {
+            if (zombies[i] != null) {
+                if (!zombies[i].isDead()) {
+                    zombies[i].move();
+                    // make boolean array with gridCol and gridRow
+                }
+            }
+        }
+    }
+
+    private void checkCollision() {
+        for (int i = 0; i < buyableLand; i++) {
+            for (int j = 0; j < rows; j++) {
+                
+            }
+        }
+    }
+
 }

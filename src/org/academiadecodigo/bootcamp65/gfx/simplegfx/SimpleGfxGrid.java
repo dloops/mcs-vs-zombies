@@ -18,8 +18,8 @@ public class SimpleGfxGrid implements Grid {
         this.cols = cols;
         this.rows = rows;
         this.cellSize = cellSize;
-        width = (cols * cellSize);
-        height = (rows * cellSize);
+        width = (rows * cellSize);
+        height = (cols * cellSize);
     }
 
     /**

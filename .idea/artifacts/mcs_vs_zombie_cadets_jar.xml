@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="mcs-vs-zombie-cadets:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/mcs_vs_zombie_cadets_jar</output-path>
+    <root id="archive" name="mcs-vs-zombie-cadets.jar">
+      <element id="module-output" name="mcs-vs-zombie-cadets" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/keyboard-and-mouse-handler/lib/simplegraphics.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
