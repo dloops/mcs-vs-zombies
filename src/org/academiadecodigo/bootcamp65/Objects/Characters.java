@@ -21,8 +21,8 @@ public interface Characters {
     public void setImage(String source);
 
 
-    public int gridCol();
+    public int getCol();
 
-    public int gridRow();
+    public int getRow();
 
 }

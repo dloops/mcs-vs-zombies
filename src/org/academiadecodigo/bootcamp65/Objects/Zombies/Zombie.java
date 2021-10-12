@@ -4,14 +4,15 @@ import org.academiadecodigo.bootcamp65.Objects.Characters;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.GridImage;
 
 public class Zombie implements Characters {
-    private int health;
+    private int health = 3;
     private boolean dead = false;
     private float acc;
-    private float moveAcc = 0.3f;
+    private float moveAcc = 0.1f;
     private int col;
     private int row;
     private int startingCol;
     private int startingRow;
+    boolean allowedToMove = true;
 
     GridImage zombieImage;
 
@@ -25,17 +26,19 @@ public class Zombie implements Characters {
 
     @Override
     public void move() {
-        if(row > 1) {
+        if(allowedToMove) {
+        if(row > 0) {
             if ((int) acc >= 1) {
                 row -= 1;
                 zombieImage.move(row, col);
-                acc = 0.0f;
+                acc = acc - 1.0f;
                 //MOVE
-            } else accumulator(moveAcc);
+            } else accumulator();
         }
     }
+    }
 
-    private int accumulator(float acc) {
+    private int accumulator() {
         this.acc += moveAcc;
         return (int) acc;
     }
@@ -53,7 +56,7 @@ public class Zombie implements Characters {
 
     @Override
     public void createImage(String source) {
-        zombieImage = new GridImage(0, row, col, source);
+        zombieImage = new GridImage(0, row, col, source, false);
     }
 
     @Override
@@ -84,16 +87,23 @@ public class Zombie implements Characters {
     }
 
     @Override
-    public int gridCol() {
+    public int getCol() {
         return col;
     }
 
     @Override
-    public int gridRow() {
+    public int getRow() {
         return row;
     }
 
     public boolean atSpawn() {
         return startingRow == row;
+    }
+
+    public void setAllowedToMove(boolean allowance) {
+        allowedToMove = allowance;
+    }
+    public boolean canMove() {
+        return allowedToMove;
     }
 }

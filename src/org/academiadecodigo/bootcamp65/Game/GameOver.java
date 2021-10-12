@@ -12,6 +12,8 @@ public class GameOver implements MouseHandler {
     private Mouse mouse;
     private boolean mouseClicked;
 
+    private boolean isOver;
+
     /**
      * Game Over page, pretty self explanoty
      * If you click it the program kills itself
@@ -26,6 +28,14 @@ public class GameOver implements MouseHandler {
 
         pic = new Picture(0, 0, introSource);
         pic.draw();
+    }
+
+    public boolean isOver() {
+        return isOver;
+    }
+
+    public void setOver() {
+        isOver = true;
     }
 
     /**

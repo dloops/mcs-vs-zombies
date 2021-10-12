@@ -42,6 +42,7 @@ public class Intro implements MouseHandler {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
+        System.out.println("clicked");
         pic.delete();
         mouseClicked = true;
         mouse.removeEventListener(MouseEventType.MOUSE_CLICKED);

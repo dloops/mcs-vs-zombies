@@ -1,5 +1,7 @@
 package org.academiadecodigo.bootcamp65.Objects.Plants;
 
+import org.academiadecodigo.bootcamp65.Game.Game;
+import org.academiadecodigo.bootcamp65.Objects.Bullet;
 import org.academiadecodigo.bootcamp65.Objects.Characters;
 import org.academiadecodigo.bootcamp65.Objects.Plants.PlantPictures;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.GridImage;
@@ -9,15 +11,19 @@ public class Plant implements Characters {
     private boolean dead;
     private int col;
     private int row;
-    private int imageReduction;
+    private double imageReduction;
+    private float acc;
+    private float bulletAcc = 0.9f;
 
-    GridImage plantImage;
+    private Bullet bullets[];
+    private GridImage plantImage;
 
     public Plant(int col, int row) {
         health = 2;
-        imageReduction = 30;
+        imageReduction = Game.gameSize * 0.15;
         this.col = col;
         this.row = row;
+        bullets = new Bullet[row];
         createImage(PlantPictures.BasicPlant[(int) (Math.random() * PlantPictures.BasicPlant.length)]);
     }
 
@@ -25,20 +31,39 @@ public class Plant implements Characters {
     public void move() {
     }
 
+    public void shoot() {
+        if(!isDead()) {
+            if ((int) acc >= 1) {
+                acc = (int) acc - 1;
+                for (int i = 0; i < bullets.length; i++) {
+                    if (bullets[i] == null) {
+                        bullets[i] = new Bullet(col, row + 1);
+                        return;
+                    }
+                }
+            } else accumulator();
+        }
+    }
+
+    private int accumulator() {
+        this.acc += bulletAcc;
+        return (int) acc;
+    }
+
     @Override
     public void damage(int dmg) {
-        if((health -= dmg) >= 0) {
+        if(!isDead())
             health -= dmg;
-            return;
-        }
 
-        health = 0;
-        setDead();
+        if(health <= 0) {
+            health = 0;
+            setDead();
+        }
     }
 
     @Override
     public void createImage(String source) {
-        plantImage = new GridImage(imageReduction, row, col, source);
+        plantImage = new GridImage((int) imageReduction, row, col, source, false);
     }
 
     @Override
@@ -69,12 +94,17 @@ public class Plant implements Characters {
     }
 
     @Override
-    public int gridCol() {
+    public int getCol() {
         return col;
     }
 
     @Override
-    public int gridRow() {
+    public int getRow() {
         return row;
     }
+
+    public Bullet[] getBullets() {
+        return bullets;
+    }
+
 }

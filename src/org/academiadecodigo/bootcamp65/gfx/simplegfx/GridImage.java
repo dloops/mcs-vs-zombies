@@ -22,17 +22,26 @@ public class GridImage {
      * @param source source of the image file
      */
 
-    public GridImage(int imageReduction, int col, int row, String source) {
+    public GridImage(int imageReduction, int col, int row, String source, boolean bullet) {
         if(imageReduction != 0)
             this.imageReduction = imageReduction + reductionSafety;
 
         pic = new Picture(col*gameSize, row*gameSize, source); // Magic 0 as both of those parameters are overwritten with move(); straight away
         pic.grow(-PictureCalc.resizeX(pic.getWidth())-imageReduction, -PictureCalc.resizeY(pic.getHeight())-imageReduction);
+        if(bullet) {
+            moveBullet(col, row);
+            return;
+        }
         move(col, row);
     }
 
     public void move(int col, int row) {
         pic.translate(-pic.getMaxX()+(col*gameSize)+padding-imageReduction, -pic.getMaxY()+(row*gameSize)+padding);
+        pic.draw();
+    }
+
+    public void moveBullet(int col, int row) {
+        pic.translate(-pic.getMaxX()+(col*gameSize)+padding-imageReduction-(gameSize*0.125), -pic.getMaxY()+(row*gameSize)+padding-(gameSize*0.325));
         pic.draw();
     }
 
