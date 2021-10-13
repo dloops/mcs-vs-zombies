@@ -13,6 +13,7 @@ public class SimpleGfxGrid implements Grid {
     private int cellSize;
     private int PADDING = Game.PADDING;
     Rectangle rect;
+    Rectangle shopRect;
 
     public SimpleGfxGrid(int cols, int rows, int cellSize){
         this.cols = cols;
@@ -29,6 +30,9 @@ public class SimpleGfxGrid implements Grid {
     public void init() {
         rect = new Rectangle(PADDING, PADDING, width, height);
         rect.draw();
+
+        shopRect = rect = new Rectangle(width+(PADDING*2), PADDING, cellSize*2, cellSize*cols);
+        shopRect.draw();
     }
 
     /**

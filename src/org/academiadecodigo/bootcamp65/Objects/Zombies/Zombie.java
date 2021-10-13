@@ -4,7 +4,7 @@ import org.academiadecodigo.bootcamp65.Objects.Characters;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.GridImage;
 
 public class Zombie implements Characters {
-    private int health = 3;
+    private int health = 8;
     private boolean dead = false;
     private float acc;
     private float moveAcc = 0.1f;

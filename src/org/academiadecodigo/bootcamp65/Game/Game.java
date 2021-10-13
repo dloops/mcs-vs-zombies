@@ -7,7 +7,7 @@ import org.academiadecodigo.bootcamp65.Objects.Zombies.Zombie;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.SimpleGfxGrid;
 
 public class Game {
-    public final static int gameSize = 150;
+    public final static int gameSize = 200;
     public final static int PADDING = 10;
     private int cols;
     private int rows;
@@ -22,15 +22,14 @@ public class Game {
     private GameOver gameOver;
     private Zombie[] zombies;
     private Plant[] plants;
-    private int[][] occupiedSlots;
 
-    private float zombieSpawnChance = 0.05f;
+    private float zombieSpawnChance = 0.005f;
 
 
     public Game(int cols, int rows, int threadSleep) throws InterruptedException {
         this.cols = cols;
         this.rows = rows;
-        occupiedSlots = new int[cols + 1][rows + 1];
+
         buyableLand = (int) Math.ceil((double) rows / 3);
         plants = new Plant[buyableLand * rows];
 
@@ -45,6 +44,8 @@ public class Game {
 
         grid = new SimpleGfxGrid(cols, rows, gameSize);
         grid.init();
+
+        Shop shop = new Shop(this, grid, grid.getWidth(), cols, rows);
 
         start();
     }
@@ -62,12 +63,6 @@ public class Game {
 
     public void start() throws InterruptedException {
 
-        plants[0] = new Plant(1, 1);
-        plants[1] = new Plant(2, 1);
-        plants[2] = new Plant(3, 1);
-        plants[3] = new Plant(4, 1);
-        plants[4] = new Plant(5, 1);
-
         while (!gameOver.isOver()) {
 
             Thread.sleep(200);
@@ -80,7 +75,6 @@ public class Game {
             bulletCollision();
             moveBullets();
             moveZombies();
-            bulletCollision();
 
         }
 
@@ -90,7 +84,7 @@ public class Game {
         sleepCount += 200;
         if (sleepCount >= 10000) {
             sleepCount = 0;
-            zombieSpawnChance += 0.01f;
+            zombieSpawnChance += 0.025f;
             System.out.println("zombie spawn chance - " + zombieSpawnChance);
         }
     }
@@ -130,7 +124,6 @@ public class Game {
                         gameOver.over();
                         gameOver.setOver();
                     }
-                    // make boolean array with gridCol and gridRow
                 }
             }
         }
@@ -206,8 +199,6 @@ public class Game {
                         for (int k = 0; k < zombies.length; k++) {
                             if (zombies[k] != null) {
                                 if (bullets[j].getCol() == zombies[k].getCol() && bullets[j].getRow() == zombies[k].getRow()) {
-                                    System.out.println(bullets[j].getCol() + " " + bullets[j].getRow());
-                                    System.out.println(zombies[k].getCol() + " " + zombies[k].getCol());
                                     zombies[k].damage(bullets[j].getDmg());
                                     bullets[j].destroy();
                                 }
@@ -217,5 +208,21 @@ public class Game {
                 }
             }
         }
+    }
+
+    public boolean newPlant(int plantType, int col, int row) {
+        for (int i = 0; i < plants.length; i++) {
+            if (plants[i] == null) {
+                plants[i] = new Plant(row, col);
+                System.out.println("new plant, col " + col + " row " + row);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getBuyableLand() {
+        System.out.println(buyableLand);
+        return buyableLand;
     }
 }

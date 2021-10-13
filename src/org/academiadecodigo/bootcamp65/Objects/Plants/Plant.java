@@ -13,7 +13,8 @@ public class Plant implements Characters {
     private int row;
     private double imageReduction;
     private float acc;
-    private float bulletAcc = 0.9f;
+    private float bulletAcc = 0.3f;
+    private int maxBullets = 3;
 
     private Bullet bullets[];
     private GridImage plantImage;
@@ -23,7 +24,7 @@ public class Plant implements Characters {
         imageReduction = Game.gameSize * 0.15;
         this.col = col;
         this.row = row;
-        bullets = new Bullet[row];
+        bullets = new Bullet[3];
         createImage(PlantPictures.BasicPlant[(int) (Math.random() * PlantPictures.BasicPlant.length)]);
     }
 

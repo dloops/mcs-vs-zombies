@@ -3,9 +3,12 @@ package org.academiadecodigo.bootcamp65.gfx.simplegfx;
 import org.academiadecodigo.bootcamp65.Game.*;
 import org.academiadecodigo.bootcamp65.pictures.Picture;
 import org.academiadecodigo.bootcamp65.pictures.PictureCalc;
+import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Text;
 
 public class GridImage {
     private Picture pic;
+    Text text;
     private int gameSize = Game.gameSize;
     private int padding = Game.PADDING;
     private int imageReduction;
@@ -45,11 +48,39 @@ public class GridImage {
         pic.draw();
     }
 
+    public void moveShop(int col, int row, int width) {
+        pic.translate(-pic.getMaxX()+(col*gameSize)+(padding*2)-imageReduction+width, -pic.getMaxY()+(row*gameSize)+padding);
+        pic.draw();
+    }
+
+    public void createText(String price) {
+        text = new Text(pic.getX()+10, pic.getY()-(pic.getHeight()*0.2)+10, "Gold: " + price);
+        text.setColor(Color.MAGENTA);
+        text.grow(10,7);
+        text.draw();
+    }
+
     public void show() {
         pic.draw();
     }
 
     public void hide() {
         pic.delete();
+    }
+
+    public int getY() {
+        return pic.getY();
+    }
+
+    public int getX() {
+        return pic.getX();
+    }
+
+    public int getMaxY() {
+        return pic.getMaxY();
+    }
+
+    public int getMaxX() {
+        return pic.getMaxX();
     }
 }

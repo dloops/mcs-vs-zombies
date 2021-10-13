@@ -2,14 +2,14 @@ package org.academiadecodigo.bootcamp65.Objects.Zombies;
 
 public class ZombiePictures {
     public static final String[] BasicZombie = {
-            "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png",
-            "src/org/academiadecodigo/bootcamp65/PictureFiles/zombie.png",
-            "src/org/academiadecodigo/bootcamp65/PictureFiles/zombie.png"
+            "src/PictureFiles/baljeet.png",
+            "src/PictureFiles/zombie.png",
+            "src/PictureFiles/zombie.png"
     };
 
     public static final String[] ArmouredZombie = {
-            "src/org/academiadecodigo/bootcamp65/PictureFiles/baljeet.png",
-            "src/org/academiadecodigo/bootcamp65/PictureFiles/zombie.png",
-            "src/org/academiadecodigo/bootcamp65/PictureFiles/zombie.png"
+            "src/baljeet.png",
+            "src/zombie.png",
+            "src/zombie.png"
     };
 }
