@@ -1,9 +1,7 @@
 package org.academiadecodigo.bootcamp65.Objects.Plants;
 
 import org.academiadecodigo.bootcamp65.Game.Game;
-import org.academiadecodigo.bootcamp65.Objects.Bullet;
 import org.academiadecodigo.bootcamp65.Objects.Characters;
-import org.academiadecodigo.bootcamp65.Objects.Plants.PlantPictures;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.GridImage;
 
 public class Plant implements Characters {
@@ -25,10 +23,6 @@ public class Plant implements Characters {
         this.row = row;
         bullets = new Bullet[row];
         createImage(PlantPictures.BasicPlant[(int) (Math.random() * PlantPictures.BasicPlant.length)]);
-    }
-
-    @Override
-    public void move() {
     }
 
     public void shoot() {

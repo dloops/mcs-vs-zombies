@@ -1,4 +1,4 @@
-package org.academiadecodigo.bootcamp65.Objects;
+package org.academiadecodigo.bootcamp65.Objects.Plants;
 
 import org.academiadecodigo.bootcamp65.Game.Game;
 import org.academiadecodigo.bootcamp65.Objects.Zombies.ZombiePictures;
@@ -12,6 +12,7 @@ public class Bullet {
     private int row;
     private double imageReduction = Game.gameSize * 0.375;
     private boolean destroyed;
+
 
     private GridImage bulletImage;
 

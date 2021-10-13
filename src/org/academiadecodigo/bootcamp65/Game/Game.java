@@ -1,14 +1,16 @@
 package org.academiadecodigo.bootcamp65.Game;
 
-import org.academiadecodigo.bootcamp65.Objects.Bullet;
-import org.academiadecodigo.bootcamp65.Objects.ObjectTypes;
+import org.academiadecodigo.bootcamp65.Objects.Plants.Bullet;
 import org.academiadecodigo.bootcamp65.Objects.Plants.*;
+import org.academiadecodigo.bootcamp65.Objects.Shop;
 import org.academiadecodigo.bootcamp65.Objects.Zombies.Zombie;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.SimpleGfxGrid;
+import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 public class Game {
-    public final static int gameSize = 150;
-    public final static int PADDING = 10;
+    public final static int gameSize = 100;
+    public final static int PADDING = 120;
     private int cols;
     private int rows;
     private int threadSleep;
@@ -16,7 +18,9 @@ public class Game {
     private int buyableLand;
     private float acc;
     private float damageAccumulator = 0.3f;
+    private Shop shop;
 
+    private Rectangle sizeGame;
     private SimpleGfxGrid grid;
     private Menu intro;
     private GameOver gameOver;
@@ -30,21 +34,23 @@ public class Game {
     public Game(int cols, int rows, int threadSleep) throws InterruptedException {
         this.cols = cols;
         this.rows = rows;
-        occupiedSlots = new int[cols + 1][rows + 1];
-        buyableLand = (int) Math.ceil((double) rows / 3);
-        plants = new Plant[buyableLand * rows];
-
-        zombies = new Zombie[(cols * rows) - (rows * 2)];
+        this.occupiedSlots = new int[cols + 1][rows + 1];
+        this.buyableLand = (int) Math.ceil((double) rows / 3);
+        this.plants = new Plant[this.buyableLand * rows];
+        System.out.println(5 * 8 + " " + this.buyableLand * rows);
+        this.zombies = new Zombie[(cols * rows) - (rows * 2)];
         this.threadSleep = threadSleep;
+        this.shop = new Shop();
 
-        intro = new Menu();
-        gameOver = new GameOver();
-        intro.intro();
+        this.intro = new Menu();
+        this.gameOver = new GameOver();
+        this.intro.intro();
+
 
         Thread.sleep(threadSleep);
-
-        grid = new SimpleGfxGrid(cols, rows, gameSize);
-        grid.init();
+        this.sizeGame = new Rectangle(0, 0, 1000, 720);
+        this.sizeGame.setColor(Color.WHITE);
+        this.grid = new SimpleGfxGrid(cols, rows, this.gameSize);
 
         start();
     }
@@ -61,6 +67,9 @@ public class Game {
      */
 
     public void start() throws InterruptedException {
+        this.sizeGame.draw();
+        this.grid.init();
+        this.shop.init();
 
         plants[0] = new Plant(1, 1);
         plants[1] = new Plant(2, 1);
@@ -68,40 +77,48 @@ public class Game {
         plants[3] = new Plant(4, 1);
         plants[4] = new Plant(5, 1);
 
-        while (!gameOver.isOver()) {
+        while (!this.gameOver.isOver()) {
 
             Thread.sleep(200);
 
             difficultyIncrease();
+
             spawnZombies();
+
             checkCollision();
 
             plantsShoot();
+
             bulletCollision();
+
             moveBullets();
+
             moveZombies();
+
             bulletCollision();
+
+            //createPlant(true);
 
         }
 
     }
 
     private void difficultyIncrease() {
-        sleepCount += 200;
-        if (sleepCount >= 10000) {
-            sleepCount = 0;
-            zombieSpawnChance += 0.01f;
-            System.out.println("zombie spawn chance - " + zombieSpawnChance);
+        this.sleepCount += 200;
+        if (this.sleepCount >= 10000) {
+            this.sleepCount = 0;
+            this.zombieSpawnChance += 0.01f;
+            System.out.println("zombie spawn chance - " + this.zombieSpawnChance);
         }
     }
 
     private void spawnZombies() {
-        for (int i = 1; i <= cols; i++) {
+        for (int i = 1; i <= this.cols; i++) {
             boolean occupied = false;
 
-            for (int j = 0; j < zombies.length; j++) {
-                if (zombies[j] != null) {
-                    if (zombies[j].getCol() == i && zombies[j].getRow() == rows) {
+            for (int j = 0; j < this.zombies.length; j++) {
+                if (this.zombies[j] != null) {
+                    if (this.zombies[j].getCol() == i && this.zombies[j].getRow() == this.rows) {
                         occupied = true;
                         continue;
                     }
@@ -109,10 +126,10 @@ public class Game {
             }
 
             if (!occupied) {
-                if (zombieSpawnChance > Math.random()) {
-                    for (int k = 0; k < zombies.length; k++) {
-                        if (zombies[k] == null || zombies[k].isDead()) {
-                            zombies[k] = new Zombie(i, rows);
+                if (this.zombieSpawnChance > Math.random()) {
+                    for (int k = 0; k < this.zombies.length; k++) {
+                        if (this.zombies[k] == null || this.zombies[k].isDead()) {
+                            this.zombies[k] = new Zombie(i, this.rows);
                             return;
                         }
                     }
@@ -122,44 +139,43 @@ public class Game {
     }
 
     private void moveZombies() {
-        for (int i = 0; i < zombies.length; i++) {
-            if (zombies[i] != null) {
-                if (!zombies[i].isDead()) {
-                    zombies[i].move();
-                    if (zombies[i].getRow() == 0) {
-                        gameOver.over();
-                        gameOver.setOver();
-                    }
-                    // make boolean array with gridCol and gridRow
+        for (int i = 0; i < this.zombies.length; i++) {
+            if (this.zombies[i] != null && !this.zombies[i].isDead()) {
+                this.zombies[i].move();
+                if (this.zombies[i].getRow() == 0) {
+                    this.gameOver.over();
+                    this.gameOver.setOver();
                 }
+                // make boolean array with gridCol and gridRow
+
             }
         }
     }
 
     private void checkCollision() {
-        for (int i = 0; i < plants.length; i++) {
-            if (plants[i] != null) {
-                if (plants[i].isDead()) {
-                    plants[i] = null;
+        for (int i = 0; i < this.plants.length; i++) {
+            if (this.plants[i] != null) {
+                if (this.plants[i].isDead()) {
+                    this.plants[i] = null;
                     continue;
                 }
 
-                for (int j = 0; j < zombies.length; j++) {
-                    if (zombies[j] != null) {
-                        if (zombies[j].isDead()) {
-                            zombies[j] = null;
+                for (int j = 0; j < this.zombies.length; j++) {
+                    if (this.zombies[j] != null) {
+                        if (this.zombies[j].isDead()) {
+                            this.zombies[j] = null;
                             continue;
                         }
-                        if (plants[i].getCol() == zombies[j].getCol() && plants[i].getRow() == zombies[j].getRow() - 1) {
-                            if ((int) acc >= 1) {
-                                zombies[j].setAllowedToMove(false);
-                                acc -= 1;
-                                plants[i].damage(1);
-                                if (plants[i].isDead())
-                                    zombies[j].setAllowedToMove(true);
+                        if (this.plants[i].getCol() == zombies[j].getCol() && this.plants[i].getRow() == this.zombies[j].getRow() - 1) {
+                            if ((int) this.acc >= 1) {
+                                this.zombies[j].setAllowedToMove(false);
+                                this.acc -= 1;
+                                this.plants[i].damage(1);
+                                if (this.plants[i].isDead())
+                                    this.zombies[j].setAllowedToMove(true);
                             } else {
-                                zombies[j].setAllowedToMove(false);
-                                acc += damageAccumulator;
+                                this.zombies[j].setAllowedToMove(false);
+                                this.acc += this.damageAccumulator;
                                 return;
                             }
                         }
@@ -170,9 +186,11 @@ public class Game {
     }
 
     private void plantsShoot() {
-        for (int i = 0; i < plants.length; i++) {
-            if (plants[i] != null) {
-                plants[i].shoot();
+
+
+        for (int i = 0; i < this.plants.length; i++) {
+            if (this.plants[i] != null) {
+                this.plants[i].shoot();
             }
         }
     }
@@ -180,16 +198,16 @@ public class Game {
 
     public void moveBullets() {
         Bullet[] bullets;
-        for (int i = 0; i < plants.length; i++) {
-            if (plants[i] != null) {
-                bullets = plants[i].getBullets();
+        for (int i = 0; i < this.plants.length; i++) {
+            if (this.plants[i] != null) {
+                bullets = this.plants[i].getBullets();
                 for (int j = 0; j < bullets.length; j++) {
                     if (bullets[j] != null) {
                         if (bullets[j].isDestroyed()) {
                             bullets[j] = null;
                             continue;
                         }
-                        bullets[j].move(rows);
+                        bullets[j].move(this.rows);
                     }
                 }
             }
@@ -198,17 +216,17 @@ public class Game {
 
     public void bulletCollision() {
         Bullet[] bullets;
-        for (int i = 0; i < plants.length; i++) {
-            if (plants[i] != null) {
-                bullets = plants[i].getBullets();
+        for (int i = 0; i < this.plants.length; i++) {
+            if (this.plants[i] != null) {
+                bullets = this.plants[i].getBullets();
                 for (int j = 0; j < bullets.length; j++) {
                     if (bullets[j] != null) {
-                        for (int k = 0; k < zombies.length; k++) {
-                            if (zombies[k] != null) {
-                                if (bullets[j].getCol() == zombies[k].getCol() && bullets[j].getRow() == zombies[k].getRow()) {
-                                    System.out.println(bullets[j].getCol() + " " + bullets[j].getRow());
-                                    System.out.println(zombies[k].getCol() + " " + zombies[k].getCol());
-                                    zombies[k].damage(bullets[j].getDmg());
+                        for (int k = 0; k < this.zombies.length; k++) {
+                            if (this.zombies[k] != null) {
+                                if (bullets[j].getCol() == this.zombies[k].getCol() && bullets[j].getRow() == zombies[k].getRow()) {
+                                    //System.out.println(bullets[j].getCol() + " " + bullets[j].getRow());
+                                    //System.out.println(this.zombies[k].getCol() + " " + zombies[k].getCol());
+                                    this.zombies[k].damage(bullets[j].getDmg());
                                     bullets[j].destroy();
                                 }
                             }
@@ -218,4 +236,23 @@ public class Game {
             }
         }
     }
+
+    //Get rows and cols in the parameters, than create a plant and associate to the array
+    public void createPlant(boolean create){
+
+        if(create == true){
+
+            int count=1;
+            for (int i = 0; i < plants.length; i++) {
+
+            }
+            plants[5] = new Plant(1, 2);
+            plants[6] = new Plant(2, 2);
+            plants[7] = new Plant(3, 2);
+            plants[8] = new Plant(4, 2);
+            plants[9] = new Plant(5, 2);
+        }
+
+    }
 }
+

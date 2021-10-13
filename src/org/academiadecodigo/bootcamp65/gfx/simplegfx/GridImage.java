@@ -35,6 +35,14 @@ public class GridImage {
         move(col, row);
     }
 
+    public static void designShop(){
+        Picture shopPlant = new Picture(150, 50, "src/org/academiadecodigo/bootcamp65/PictureFiles/shopPlant.png");
+        Picture shopPlantWall = new Picture(195, 50, "src/org/academiadecodigo/bootcamp65/PictureFiles/PlantWall.png");
+        shopPlantWall.draw();
+        shopPlant.draw();
+    }
+
+
     public void move(int col, int row) {
         pic.translate(-pic.getMaxX()+(col*gameSize)+padding-imageReduction, -pic.getMaxY()+(row*gameSize)+padding);
         pic.draw();

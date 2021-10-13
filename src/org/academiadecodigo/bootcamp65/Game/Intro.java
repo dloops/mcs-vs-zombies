@@ -29,9 +29,6 @@ public class Intro implements MouseHandler {
         pic = new Picture(0, 0, introSource);
         pic.draw();
 
-        while(!mouseClicked) {
-            Thread.sleep(1);
-        };
     }
     /**
      * removeEventListener results in ConcurrentModificationException, ignore it?

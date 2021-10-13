@@ -10,8 +10,6 @@ public class Zombie implements Characters {
     private float moveAcc = 0.1f;
     private int col;
     private int row;
-    private int startingCol;
-    private int startingRow;
     boolean allowedToMove = true;
 
     GridImage zombieImage;
@@ -19,23 +17,17 @@ public class Zombie implements Characters {
     public Zombie(int col, int row) {
         this.col = col;
         this.row = row;
-        startingCol = col;
-        startingRow = row;
         createImage(ZombiePictures.BasicZombie[(int) (Math.random() * ZombiePictures.BasicZombie.length)]);
     }
 
-    @Override
     public void move() {
-        if(allowedToMove) {
-        if(row > 0) {
+        if (allowedToMove) {
             if ((int) acc >= 1) {
                 row -= 1;
                 zombieImage.move(row, col);
                 acc = acc - 1.0f;
-                //MOVE
             } else accumulator();
         }
-    }
     }
 
     private int accumulator() {
@@ -45,7 +37,7 @@ public class Zombie implements Characters {
 
     @Override
     public void damage(int dmg) {
-        if((health -= dmg) >= 0) {
+        if ((health -= dmg) >= 0) {
             health -= dmg;
             return;
         }
@@ -96,13 +88,11 @@ public class Zombie implements Characters {
         return row;
     }
 
-    public boolean atSpawn() {
-        return startingRow == row;
-    }
 
     public void setAllowedToMove(boolean allowance) {
         allowedToMove = allowance;
     }
+
     public boolean canMove() {
         return allowedToMove;
     }
