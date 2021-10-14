@@ -1,5 +1,4 @@
 package org.academiadecodigo.bootcamp65.Objects;
-import org.academiadecodigo.bootcamp65.gfx.simplegfx.*;
 
 
 public interface Characters {

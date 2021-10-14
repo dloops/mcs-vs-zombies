@@ -43,13 +43,16 @@ public class Shop implements MouseHandler {
      * @param mouseEvent
      */
 
+    private int mouseClicks = 0;
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
+        System.out.println(mouseClicks++);
         for (int i = 0; i < shopImages.length; i++) {
             if (shopImages[i] != null) {
                 if (mouseX >= shopImages[0].getX() && mouseY >= shopImages[0].getY()
                         && mouseX <= shopImages[0].getMaxX() && mouseY <= shopImages[0].getMaxY()) {
                     selectedPlant = i;
+                    System.out.println("plant selected");
                     return;
                 }
             }
@@ -59,7 +62,7 @@ public class Shop implements MouseHandler {
             for (int i = 1; i < game.getBuyableLand()+1; i++) {
                 for (int j = 1; j < cols+1; j++) {
                     if (mouseX <= i * Game.gameSize + Game.PADDING && mouseY <= j * Game.gameSize + Game.PADDING) {
-                        game.newPlant(selectedPlant, i, j);
+                        while(!game.newPlant(selectedPlant, i, j));
                         selectedPlant = -1;
                         return;
                     }
@@ -84,6 +87,7 @@ public class Shop implements MouseHandler {
         // mouse corrections
         mouseX -= 8;
         mouseY -= 31;
+        //System.out.println(mouseX);
 
     }
 

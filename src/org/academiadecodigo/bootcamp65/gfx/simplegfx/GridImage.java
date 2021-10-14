@@ -16,7 +16,7 @@ public class GridImage {
 
     /**
      * Makes a new image and places it in a col and row, image is resized to comply with gameSize
-     * All images are resized equally, some may get distorted.
+     * All images are resized equally (unless imageReduction is added), some may get distorted.
      *
      * babyboss can't make comments for shit (╯°□°）╯︵ ┻━┻
      *
@@ -39,7 +39,8 @@ public class GridImage {
     }
 
     public void move(int col, int row) {
-        pic.translate(-pic.getMaxX()+(col*gameSize)+padding-imageReduction, -pic.getMaxY()+(row*gameSize)+padding);
+        //pic.translate(-pic.getMaxX()+(col*gameSize)+padding-imageReduction, -pic.getMaxY()+(row*gameSize)+padding);
+        pic.translate(-pic.getMaxX()+(col*gameSize)+padding, -pic.getMaxY()+(row*gameSize)+padding);
         pic.draw();
     }
 
@@ -49,7 +50,8 @@ public class GridImage {
     }
 
     public void moveShop(int col, int row, int width) {
-        pic.translate(-pic.getMaxX()+(col*gameSize)+(padding*2)-imageReduction+width, -pic.getMaxY()+(row*gameSize)+padding);
+        //pic.translate(-pic.getMaxX()+(col*gameSize)+(padding*2)-imageReduction+width, -pic.getMaxY()+(row*gameSize)+padding);
+        pic.translate(-pic.getMaxX()+(col*gameSize)+(padding*2)+width, -pic.getMaxY()+(row*gameSize)+padding);
         pic.draw();
     }
 

@@ -3,7 +3,6 @@ package org.academiadecodigo.bootcamp65.Objects.Plants;
 import org.academiadecodigo.bootcamp65.Game.Game;
 import org.academiadecodigo.bootcamp65.Objects.Bullet;
 import org.academiadecodigo.bootcamp65.Objects.Characters;
-import org.academiadecodigo.bootcamp65.Objects.Plants.PlantPictures;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.GridImage;
 
 public class Plant implements Characters {
@@ -91,6 +90,12 @@ public class Plant implements Characters {
     @Override
     public void setDead() {
         plantImage.hide();
+        for (int i = 0; i < bullets.length; i++) {
+            if(bullets[i] != null) {
+                bullets[i].destroy();
+                bullets[i] = null;
+            }
+        }
         dead = true;
     }
 

@@ -7,7 +7,7 @@ import org.academiadecodigo.bootcamp65.Objects.Zombies.Zombie;
 import org.academiadecodigo.bootcamp65.gfx.simplegfx.SimpleGfxGrid;
 
 public class Game {
-    public final static int gameSize = 200;
+    public final static int gameSize = 150;
     public final static int PADDING = 10;
     private int cols;
     private int rows;
@@ -16,6 +16,7 @@ public class Game {
     private int buyableLand;
     private float acc;
     private float damageAccumulator = 0.3f;
+    private int zombieCounter = 5;
 
     private SimpleGfxGrid grid;
     private Menu intro;
@@ -200,6 +201,10 @@ public class Game {
                             if (zombies[k] != null) {
                                 if (bullets[j].getCol() == zombies[k].getCol() && bullets[j].getRow() == zombies[k].getRow()) {
                                     zombies[k].damage(bullets[j].getDmg());
+                                    if(zombies[k].isDead())
+                                        zombieCounter--;
+                                    if(zombieCounter == 0)
+                                        gameOver.over();
                                     bullets[j].destroy();
                                 }
                             }
